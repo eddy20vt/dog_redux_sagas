@@ -1,28 +1,37 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import DogProfile from './components/dog_profile.jsx';
 import './App.css';
+import { connect } from 'react-redux';
 
 class App extends Component {
+  componentWillMount(){
+    this.props.onRequestDog();
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+        <div className="App">
+          <header className="App-header">
+            <p>
+              Creando una Store con Redux
+            </p>
+          </header>
+          <DogProfile dog={this.props.dog}/>
+        </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state) =>({
+    fetching: state.fetching,
+    dog: state.dog,
+    error: state.error
+});
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onRequestDog: () => dispatch({ type: "API_CALL_REQUEST" })
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
